@@ -250,15 +250,36 @@ nui_non_smokers = length(non_smokers_ui)
 ```
 
 ```{r}
-# conducting t-test for equality of means
-t_test_4 = t.test(smokers_ui, non_smokers_ui, var.equal = TRUE)
+# calculating the pooled standard deviation
+pooled_sd_4 = sqrt(((nui_smokers - 1) * sdui_smokers^2 + (nui_non_smokers - 1) * sdui_non_smokers^2) / nui_smokers + nui_non_smokers - 2)
 ```
 
-The t-statistic is 0.85166.   
-The p-value is 0.3955.
+```{r}
+# calculating the t-statistic
+t_statistic = (meanui_smokers - meanui_non_smokers) / (pooled_sd_4 * sqrt(1/nui_smokers + 1/nui_non_smokers))
+```
+
+```{r}
+# calculating degrees of freedom
+df_4 = nui_smokers + nui_non_smokers - 2
+```
+
+```{r}
+# calculating the p-value
+p_value_4 = 2 * (1 - pt(abs(t_statistic), df_4))
+```
+
+The t-statistic is `r t_statistic`.   
+The p-value is `r p_value_4`.
 
 Since the p-value is greater than the 0.01 significance level, you fail to reject the null hypothesis as there is not sufficient evidence to support a significant difference in uterine irritability between smokers and non-smokers.
 
+Another way to do this is
+
+```{r}
+# conducting t-test for equality of means
+t_test_4 = t.test(smokers_ui, non_smokers_ui, var.equal = TRUE)
+```
 
 # Problem 5
 
